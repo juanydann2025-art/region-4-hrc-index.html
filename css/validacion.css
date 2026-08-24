@@ -1,0 +1,898 @@
+/* =========================================================
+   VALIDACIÓN DE REGISTROS
+   ========================================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+
+body {
+    margin: 0;
+    padding: 0;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    background:
+        #f3f4f6;
+
+    color:
+        #222;
+}
+
+
+/* =========================================================
+   CONTENEDOR
+   ========================================================= */
+
+.contenedor {
+    width: 100%;
+
+    max-width:
+        1800px;
+
+    margin:
+        auto;
+
+    padding:
+        20px;
+}
+
+
+/* =========================================================
+   ENCABEZADO
+   ========================================================= */
+
+.encabezado {
+    background:
+        #ffffff;
+
+    border-radius:
+        12px;
+
+    padding:
+        20px;
+
+    display:
+        flex;
+
+    justify-content:
+        space-between;
+
+    align-items:
+        center;
+
+    margin-bottom:
+        20px;
+
+    box-shadow:
+        0 2px 8px rgba(
+            0,
+            0,
+            0,
+            0.08
+        );
+}
+
+
+.encabezado h1 {
+    margin:
+        0 0 5px 0;
+
+    font-size:
+        26px;
+
+    color:
+        #b91c1c;
+}
+
+
+.encabezado p {
+    margin:
+        0;
+
+    color:
+        #222;
+}
+
+
+/* =========================================================
+   BOTONES
+   ========================================================= */
+
+button {
+    border:
+        none;
+
+    border-radius:
+        7px;
+
+    cursor:
+        pointer;
+
+    font-size:
+        14px;
+
+    transition:
+        0.2s;
+}
+
+
+button:hover {
+    opacity:
+        0.88;
+}
+
+
+.btn-actualizar {
+    background:
+        #b91c1c;
+
+    color:
+        white;
+
+    padding:
+        11px 18px;
+}
+
+
+.btn-validar {
+    background:
+        #b91c1c;
+
+    color:
+        white;
+
+    padding:
+        11px 20px;
+
+    font-weight:
+        bold;
+}
+
+
+.btn-secundario {
+    background:
+        #7f1d1d;
+
+    color:
+        white;
+
+    padding:
+        11px 20px;
+}
+
+
+.btn-cerrar {
+    background:
+        transparent;
+
+    font-size:
+        28px;
+
+    color:
+        #b91c1c;
+}
+
+
+/* =========================================================
+   BUSQUEDA
+   ========================================================= */
+
+.panel-busqueda {
+    background:
+        white;
+
+    border-radius:
+        12px;
+
+    padding:
+        20px;
+
+    display:
+        grid;
+
+    grid-template-columns:
+        2fr 1fr;
+
+    gap:
+        20px;
+
+    margin-bottom:
+        20px;
+
+    box-shadow:
+        0 2px 8px rgba(
+            0,
+            0,
+            0,
+            0.08
+        );
+}
+
+
+.campo-busqueda,
+.campo-filtro {
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        7px;
+}
+
+
+label {
+    font-weight:
+        bold;
+
+    font-size:
+        14px;
+
+    color:
+        #222;
+}
+
+
+input,
+select,
+textarea {
+    width:
+        100%;
+
+    padding:
+        10px;
+
+    border:
+        1px solid #d1d5db;
+
+    border-radius:
+        7px;
+
+    font-size:
+        14px;
+
+    outline:
+        none;
+
+    color:
+        #222;
+
+    background:
+        #ffffff;
+}
+
+
+input::placeholder,
+textarea::placeholder {
+    color:
+        #6b7280;
+}
+
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color:
+        #b91c1c;
+
+    box-shadow:
+        0 0 0 2px rgba(
+            185,
+            28,
+            28,
+            0.10
+        );
+}
+
+
+/* =========================================================
+   MENSAJE
+   ========================================================= */
+
+.mensaje {
+    padding:
+        12px 15px;
+
+    border-radius:
+        8px;
+
+    margin-bottom:
+        15px;
+
+    background:
+        #fee2e2;
+
+    color:
+        #991b1b;
+
+    border:
+        1px solid #fecaca;
+}
+
+
+.oculto {
+    display:
+        none !important;
+}
+
+
+/* =========================================================
+   RESUMEN
+   ========================================================= */
+
+.resumen {
+    margin-bottom:
+        20px;
+
+    display:
+        flex;
+
+    flex-direction:
+        row;
+
+    align-items:
+        stretch;
+
+    gap:
+        20px;
+
+    flex-wrap:
+        nowrap;
+}
+
+
+.tarjeta {
+    background:
+        white;
+
+    border-radius:
+        12px;
+
+    padding:
+        18px;
+
+    width:
+        220px;
+
+    flex:
+        0 0 220px;
+
+    box-shadow:
+        0 2px 8px rgba(
+            0,
+            0,
+            0,
+            0.08
+        );
+
+    border-top:
+        4px solid #b91c1c;
+}
+
+
+.tarjeta span {
+    display:
+        block;
+
+    color:
+        #222;
+
+    font-size:
+        13px;
+}
+
+
+.tarjeta strong {
+    display:
+        block;
+
+    font-size:
+        30px;
+
+    margin-top:
+        5px;
+
+    color:
+        #b91c1c;
+}
+
+
+/* =========================================================
+   TABLA
+   ========================================================= */
+
+.tabla-contenedor {
+    width:
+        100%;
+
+    overflow-x:
+        auto;
+
+    background:
+        white;
+
+    border-radius:
+        12px;
+
+    box-shadow:
+        0 2px 8px rgba(
+            0,
+            0,
+            0,
+            0.08
+        );
+}
+
+
+table {
+    width:
+        100%;
+
+    border-collapse:
+        collapse;
+
+    min-width:
+        1300px;
+}
+
+
+/* =========================================================
+   ENCABEZADO DE TABLA
+   ========================================================= */
+
+thead {
+    background:
+        #b91c1c;
+
+    color:
+        white;
+}
+
+
+th {
+    padding:
+        11px;
+
+    border-bottom:
+        1px solid #991b1b;
+
+    text-align:
+        left;
+
+    vertical-align:
+        middle;
+
+    font-size:
+        13px;
+
+    color:
+        white;
+
+    background:
+        #b91c1c;
+}
+
+
+/* =========================================================
+   TEXTO NORMAL DE LA TABLA
+   ========================================================= */
+
+td {
+    padding:
+        11px;
+
+    border-bottom:
+        1px solid #e5e7eb;
+
+    text-align:
+        left;
+
+    vertical-align:
+        middle;
+
+    font-size:
+        13px;
+
+    color:
+        #222;
+
+    background:
+        #ffffff;
+}
+
+
+tbody tr:hover {
+    background:
+        #fff1f2;
+}
+
+
+tbody tr:hover td {
+    background:
+        #fff1f2;
+
+    color:
+        #222;
+}
+
+
+/* =========================================================
+   FOLIO Y CATEGORÍA
+   ROJO CON LETRAS BLANCAS
+   ========================================================= */
+
+td.folio,
+td.categoria {
+    background:
+        #b91c1c;
+
+    color:
+        white;
+
+    font-weight:
+        bold;
+}
+
+
+.folio {
+    color:
+        white !important;
+
+    background:
+        #b91c1c !important;
+
+    font-weight:
+        bold;
+}
+
+
+.categoria {
+    color:
+        white !important;
+
+    background:
+        #b91c1c !important;
+
+    font-weight:
+        bold;
+}
+
+
+/* =========================================================
+   ESTADOS
+   ========================================================= */
+
+.duplicado-si {
+    background:
+        #fee2e2;
+
+    color:
+        #991b1b;
+
+    font-weight:
+        bold;
+
+    padding:
+        5px 8px;
+
+    border-radius:
+        5px;
+}
+
+
+.duplicado-no {
+    background:
+        #dcfce7;
+
+    color:
+        #166534;
+
+    font-weight:
+        bold;
+
+    padding:
+        5px 8px;
+
+    border-radius:
+        5px;
+}
+
+
+/* =========================================================
+   BOTONES DENTRO DE TABLA
+   ========================================================= */
+
+.btn-tabla {
+    background:
+        #b91c1c;
+
+    color:
+        white;
+
+    padding:
+        7px 12px;
+
+    border-radius:
+        6px;
+}
+
+
+.btn-tabla:hover {
+    background:
+        #991b1b;
+
+    opacity:
+        1;
+}
+
+
+/* =========================================================
+   MODAL
+   ========================================================= */
+
+.modal {
+    position:
+        fixed;
+
+    inset:
+        0;
+
+    background:
+        rgba(
+            0,
+            0,
+            0,
+            0.55
+        );
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    padding:
+        20px;
+
+    z-index:
+        9999;
+}
+
+
+.modal-contenido {
+    background:
+        white;
+
+    width:
+        100%;
+
+    max-width:
+        900px;
+
+    max-height:
+        90vh;
+
+    overflow-y:
+        auto;
+
+    border-radius:
+        12px;
+
+    padding:
+        20px;
+
+    border-top:
+        5px solid #b91c1c;
+}
+
+
+/* =========================================================
+   MODAL HEADER
+   ========================================================= */
+
+.modal-header {
+    display:
+        flex;
+
+    justify-content:
+        space-between;
+
+    align-items:
+        center;
+
+    margin-bottom:
+        15px;
+}
+
+
+.modal-header h2 {
+    margin:
+        0;
+
+    color:
+        #b91c1c;
+}
+
+
+/* =========================================================
+   DETALLE
+   ========================================================= */
+
+.detalle-registro {
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            1fr
+        );
+
+    gap:
+        10px;
+
+    margin-bottom:
+        20px;
+}
+
+
+.detalle-item {
+    background:
+        #f3f4f6;
+
+    border-radius:
+        7px;
+
+    padding:
+        10px;
+
+    border-left:
+        4px solid #b91c1c;
+}
+
+
+.detalle-item strong {
+    display:
+        block;
+
+    font-size:
+        12px;
+
+    color:
+        #b91c1c;
+
+    margin-bottom:
+        4px;
+}
+
+
+.detalle-item span {
+    display:
+        block;
+
+    word-break:
+        break-word;
+
+    color:
+        #222;
+}
+
+
+/* =========================================================
+   COMENTARIOS
+   ========================================================= */
+
+.campo-comentario {
+    margin-top:
+        10px;
+}
+
+
+.campo-comentario textarea {
+    resize:
+        vertical;
+
+    margin-top:
+        7px;
+}
+
+
+/* =========================================================
+   ACCIONES
+   ========================================================= */
+
+.acciones-modal {
+    display:
+        flex;
+
+    justify-content:
+        flex-end;
+
+    gap:
+        10px;
+
+    margin-top:
+        20px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (
+    max-width: 800px
+) {
+
+    .encabezado {
+        flex-direction:
+            column;
+
+        align-items:
+            flex-start;
+
+        gap:
+            15px;
+    }
+
+
+    .panel-busqueda {
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .detalle-registro {
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .contenedor {
+        padding:
+            10px;
+    }
+
+
+    .encabezado h1 {
+        font-size:
+            22px;
+    }
+
+
+    .resumen {
+        flex-wrap:
+            wrap;
+    }
+
+
+    .tarjeta {
+        width:
+            220px;
+
+        flex:
+            0 0 220px;
+    }
+
+
+    .acciones-modal {
+        flex-direction:
+            column;
+    }
+
+
+    .acciones-modal button {
+        width:
+            100%;
+    }
+
+}
