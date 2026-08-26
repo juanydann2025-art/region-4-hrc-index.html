@@ -1,898 +1,403 @@
-/* =========================================================
-   VALIDACIÓN DE REGISTROS
-   ========================================================= */
+!DOCTYPE html>
+<html lang="es">
 
-* {
-    box-sizing: border-box;
-}
+<head>
 
+  <meta charset="UTF-8">
 
-body {
-    margin: 0;
-    padding: 0;
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0">
 
-    font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
+  <title>
+    Validación de Registros
+  </title>
 
-    background:
-        #f3f4f6;
+  <link
+    rel="stylesheet"
+    href="css/validacion.css">
 
-    color:
-        #222;
-}
+</head>
 
 
-/* =========================================================
-   CONTENEDOR
-   ========================================================= */
+<body>
 
-.contenedor {
-    width: 100%;
 
-    max-width:
-        1800px;
+<!-- =========================================================
+     CONTENEDOR PRINCIPAL
+     ========================================================= -->
 
-    margin:
-        auto;
+<div class="contenedor">
 
-    padding:
-        20px;
-}
 
+  <!-- =======================================================
+       ENCABEZADO
+       ======================================================= -->
 
-/* =========================================================
-   ENCABEZADO
-   ========================================================= */
+  <div class="encabezado">
 
-.encabezado {
-    background:
-        #ffffff;
+    <div class="encabezado-info">
 
-    border-radius:
-        12px;
+      <h1>
+        Validación de Registros
+      </h1>
 
-    padding:
-        20px;
+      <p>
+        Seleccione una categoría para cargar los registros pendientes.
+      </p>
 
-    display:
-        flex;
+    </div>
 
-    justify-content:
-        space-between;
 
-    align-items:
-        center;
+    <button
+      id="btnActualizar"
+      class="btn-actualizar"
+      disabled>
 
-    margin-bottom:
-        20px;
+      🔄 Actualizar
 
-    box-shadow:
-        0 2px 8px rgba(
-            0,
-            0,
-            0,
-            0.08
-        );
-}
+    </button>
 
+  </div>
 
-.encabezado h1 {
-    margin:
-        0 0 5px 0;
 
-    font-size:
-        26px;
 
-    color:
-        #b91c1c;
-}
+  <!-- =======================================================
+       BUSQUEDA Y FILTROS
+       ======================================================= -->
 
+  <div class="panel-busqueda">
 
-.encabezado p {
-    margin:
-        0;
 
-    color:
-        #222;
-}
+    <div class="campo-filtro campo-categoria-principal">
 
+      <label for="filtroCategoria">
+        Categoría a validar
+      </label>
 
-/* =========================================================
-   BOTONES
-   ========================================================= */
 
-button {
-    border:
-        none;
+      <select id="filtroCategoria">
 
-    border-radius:
-        7px;
+        <option
+          value=""
+          selected>
 
-    cursor:
-        pointer;
+          Seleccione una categoría
 
-    font-size:
-        14px;
+        </option>
 
-    transition:
-        0.2s;
-}
 
+        <option value="Ciudadanos">
+          Ciudadanos
+        </option>
 
-button:hover {
-    opacity:
-        0.88;
-}
 
+        <option value="Peticiones">
+          Peticiones
+        </option>
 
-.btn-actualizar {
-    background:
-        #b91c1c;
 
-    color:
-        white;
+        <option value="Operaciones">
+          Operaciones
+        </option>
 
-    padding:
-        11px 18px;
-}
 
+        <option value="Bardas">
+          Bardas
+        </option>
 
-.btn-validar {
-    background:
-        #b91c1c;
 
-    color:
-        white;
+        <option value="Reuniones">
+          Reuniones
+        </option>
 
-    padding:
-        11px 20px;
+      </select>
 
-    font-weight:
-        bold;
-}
+    </div>
 
 
-.btn-secundario {
-    background:
-        #7f1d1d;
 
-    color:
-        white;
+    <div class="campo-busqueda">
 
-    padding:
-        11px 20px;
-}
+      <label for="buscarRegistro">
+        Buscar dentro de la categoría
+      </label>
 
 
-.btn-cerrar {
-    background:
-        transparent;
+      <input
+        type="text"
+        id="buscarRegistro"
+        placeholder="Folio, nombre, usuario, sección, comunidad..."
+        autocomplete="off"
+        disabled>
 
-    font-size:
-        28px;
+    </div>
 
-    color:
-        #b91c1c;
-}
 
+  </div>
 
-/* =========================================================
-   BUSQUEDA
-   ========================================================= */
 
-.panel-busqueda {
-    background:
-        white;
 
-    border-radius:
-        12px;
+  <!-- =======================================================
+       MENSAJE
+       ======================================================= -->
 
-    padding:
-        20px;
+  <div
+    id="mensaje"
+    class="mensaje oculto">
+  </div>
 
-    display:
-        grid;
 
-    grid-template-columns:
-        2fr 1fr;
 
-    gap:
-        20px;
+  <!-- =======================================================
+       RESUMEN
+       ======================================================= -->
 
-    margin-bottom:
-        20px;
+  <div class="resumen">
 
-    box-shadow:
-        0 2px 8px rgba(
-            0,
-            0,
-            0,
-            0.08
-        );
-}
 
+    <div class="tarjeta">
 
-.campo-busqueda,
-.campo-filtro {
-    display:
-        flex;
+      <span>
+        Registros pendientes
+      </span>
 
-    flex-direction:
-        column;
+      <strong id="totalPendientes">
+        0
+      </strong>
 
-    gap:
-        7px;
-}
+    </div>
 
 
-label {
-    font-weight:
-        bold;
 
-    font-size:
-        14px;
+    <div class="tarjeta">
 
-    color:
-        #222;
-}
+      <span>
+        Total de duplicados
+      </span>
 
+      <strong id="totalDuplicados">
+        0
+      </strong>
 
-input,
-select,
-textarea {
-    width:
-        100%;
+    </div>
 
-    padding:
-        10px;
 
-    border:
-        1px solid #d1d5db;
+  </div>
 
-    border-radius:
-        7px;
 
-    font-size:
-        14px;
 
-    outline:
-        none;
+  <!-- =======================================================
+       TABLA
+       ======================================================= -->
 
-    color:
-        #222;
+  <div class="tabla-contenedor">
 
-    background:
-        #ffffff;
-}
 
+    <table id="tablaRegistros">
 
-input::placeholder,
-textarea::placeholder {
-    color:
-        #6b7280;
-}
 
+      <thead>
 
-input:focus,
-select:focus,
-textarea:focus {
-    border-color:
-        #b91c1c;
+        <tr>
 
-    box-shadow:
-        0 0 0 2px rgba(
-            185,
-            28,
-            28,
-            0.10
-        );
-}
+          <th>
+            Folio
+          </th>
 
+          <th>
+            Categoría
+          </th>
 
-/* =========================================================
-   MENSAJE
-   ========================================================= */
+          <th>
+            Fecha registro
+          </th>
 
-.mensaje {
-    padding:
-        12px 15px;
+          <th>
+            Usuario que generó
+          </th>
 
-    border-radius:
-        8px;
+          <th>
+            Nombre
+          </th>
 
-    margin-bottom:
-        15px;
+          <th>
+            Duplicado
+          </th>
 
-    background:
-        #fee2e2;
+          <th>
+            Acción
+          </th>
 
-    color:
-        #991b1b;
+        </tr>
 
-    border:
-        1px solid #fecaca;
-}
+      </thead>
 
 
-.oculto {
-    display:
-        none !important;
-}
 
+      <tbody id="cuerpoTabla">
 
-/* =========================================================
-   RESUMEN
-   ========================================================= */
+        <tr>
 
-.resumen {
-    margin-bottom:
-        20px;
+          <td
+            colspan="7"
+            class="tabla-vacia">
 
-    display:
-        flex;
+            Seleccione una categoría para cargar los registros.
 
-    flex-direction:
-        row;
+          </td>
 
-    align-items:
-        stretch;
+        </tr>
 
-    gap:
-        20px;
+      </tbody>
 
-    flex-wrap:
-        nowrap;
-}
 
+    </table>
 
-.tarjeta {
-    background:
-        white;
+  </div>
 
-    border-radius:
-        12px;
 
-    padding:
-        18px;
+</div>
 
-    width:
-        220px;
 
-    flex:
-        0 0 220px;
 
-    box-shadow:
-        0 2px 8px rgba(
-            0,
-            0,
-            0,
-            0.08
-        );
+<!-- =========================================================
+     MODAL DE VALIDACIÓN
+     ========================================================= -->
 
-    border-top:
-        4px solid #b91c1c;
-}
+<div
+  id="modalValidacion"
+  class="modal oculto">
 
 
-.tarjeta span {
-    display:
-        block;
+  <div class="modal-contenido">
 
-    color:
-        #222;
 
-    font-size:
-        13px;
-}
+    <!-- =====================================================
+         ENCABEZADO DEL MODAL
+         ===================================================== -->
 
+    <div class="modal-header">
 
-.tarjeta strong {
-    display:
-        block;
 
-    font-size:
-        30px;
+      <div class="modal-titulo">
 
-    margin-top:
-        5px;
+        <span class="modal-icono">
+          ✓
+        </span>
 
-    color:
-        #b91c1c;
-}
+        <div>
 
+          <h2>
+            Detalle y validación del registro
+          </h2>
 
-/* =========================================================
-   TABLA
-   ========================================================= */
+          <p>
+            Revise la información y las fotografías antes de validar.
+          </p>
 
-.tabla-contenedor {
-    width:
-        100%;
+        </div>
 
-    overflow-x:
-        auto;
+      </div>
 
-    background:
-        white;
 
-    border-radius:
-        12px;
+      <button
+        id="btnCerrarModal"
+        class="btn-cerrar"
+        type="button"
+        title="Cerrar">
 
-    box-shadow:
-        0 2px 8px rgba(
-            0,
-            0,
-            0,
-            0.08
-        );
-}
+        ×
 
+      </button>
 
-table {
-    width:
-        100%;
 
-    border-collapse:
-        collapse;
+    </div>
 
-    min-width:
-        1300px;
-}
 
 
-/* =========================================================
-   ENCABEZADO DE TABLA
-   ========================================================= */
+    <!-- =====================================================
+         DETALLE DEL REGISTRO
+         ===================================================== -->
 
-thead {
-    background:
-        #b91c1c;
+    <div
+      id="detalleRegistro"
+      class="detalle-registro">
 
-    color:
-        white;
-}
+    </div>
 
 
-th {
-    padding:
-        11px;
 
-    border-bottom:
-        1px solid #991b1b;
+    <!-- =====================================================
+         COMENTARIOS
+         ===================================================== -->
 
-    text-align:
-        left;
+    <div class="campo-comentario">
 
-    vertical-align:
-        middle;
 
-    font-size:
-        13px;
+      <label for="comentarios">
 
-    color:
-        white;
+        Comentarios de validación
 
-    background:
-        #b91c1c;
-}
+      </label>
 
 
-/* =========================================================
-   TEXTO NORMAL DE LA TABLA
-   ========================================================= */
+      <textarea
+        id="comentarios"
+        rows="5"
+        placeholder="Escriba algún comentario sobre este registro...">
+      </textarea>
 
-td {
-    padding:
-        11px;
 
-    border-bottom:
-        1px solid #e5e7eb;
+    </div>
 
-    text-align:
-        left;
 
-    vertical-align:
-        middle;
 
-    font-size:
-        13px;
+    <!-- =====================================================
+         ACCIONES
+         ===================================================== -->
 
-    color:
-        #222;
+    <div class="acciones-modal">
 
-    background:
-        #ffffff;
-}
 
+      <button
+        id="btnCancelar"
+        class="btn-secundario"
+        type="button">
 
-tbody tr:hover {
-    background:
-        #fff1f2;
-}
+        Cerrar
 
+      </button>
 
-tbody tr:hover td {
-    background:
-        #fff1f2;
 
-    color:
-        #222;
-}
+      <button
+        id="btnValidar"
+        class="btn-validar"
+        type="button">
 
+        ✓ Validar registro
 
-/* =========================================================
-   FOLIO Y CATEGORÍA
-   ROJO CON LETRAS BLANCAS
-   ========================================================= */
+      </button>
 
-td.folio,
-td.categoria {
-    background:
-        #b91c1c;
 
-    color:
-        white;
+    </div>
 
-    font-weight:
-        bold;
-}
 
+  </div>
 
-.folio {
-    color:
-        white !important;
+</div>
 
-    background:
-        #b91c1c !important;
 
-    font-weight:
-        bold;
-}
 
+<!-- =========================================================
+     JAVASCRIPT
+     ========================================================= -->
 
-.categoria {
-    color:
-        white !important;
+<script
+  src="js/validacion.js">
+</script>
 
-    background:
-        #b91c1c !important;
 
-    font-weight:
-        bold;
-}
+</body>
 
-
-/* =========================================================
-   ESTADOS
-   ========================================================= */
-
-.duplicado-si {
-    background:
-        #fee2e2;
-
-    color:
-        #991b1b;
-
-    font-weight:
-        bold;
-
-    padding:
-        5px 8px;
-
-    border-radius:
-        5px;
-}
-
-
-.duplicado-no {
-    background:
-        #dcfce7;
-
-    color:
-        #166534;
-
-    font-weight:
-        bold;
-
-    padding:
-        5px 8px;
-
-    border-radius:
-        5px;
-}
-
-
-/* =========================================================
-   BOTONES DENTRO DE TABLA
-   ========================================================= */
-
-.btn-tabla {
-    background:
-        #b91c1c;
-
-    color:
-        white;
-
-    padding:
-        7px 12px;
-
-    border-radius:
-        6px;
-}
-
-
-.btn-tabla:hover {
-    background:
-        #991b1b;
-
-    opacity:
-        1;
-}
-
-
-/* =========================================================
-   MODAL
-   ========================================================= */
-
-.modal {
-    position:
-        fixed;
-
-    inset:
-        0;
-
-    background:
-        rgba(
-            0,
-            0,
-            0,
-            0.55
-        );
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    padding:
-        20px;
-
-    z-index:
-        9999;
-}
-
-
-.modal-contenido {
-    background:
-        white;
-
-    width:
-        100%;
-
-    max-width:
-        900px;
-
-    max-height:
-        90vh;
-
-    overflow-y:
-        auto;
-
-    border-radius:
-        12px;
-
-    padding:
-        20px;
-
-    border-top:
-        5px solid #b91c1c;
-}
-
-
-/* =========================================================
-   MODAL HEADER
-   ========================================================= */
-
-.modal-header {
-    display:
-        flex;
-
-    justify-content:
-        space-between;
-
-    align-items:
-        center;
-
-    margin-bottom:
-        15px;
-}
-
-
-.modal-header h2 {
-    margin:
-        0;
-
-    color:
-        #b91c1c;
-}
-
-
-/* =========================================================
-   DETALLE
-   ========================================================= */
-
-.detalle-registro {
-    display:
-        grid;
-
-    grid-template-columns:
-        repeat(
-            2,
-            1fr
-        );
-
-    gap:
-        10px;
-
-    margin-bottom:
-        20px;
-}
-
-
-.detalle-item {
-    background:
-        #f3f4f6;
-
-    border-radius:
-        7px;
-
-    padding:
-        10px;
-
-    border-left:
-        4px solid #b91c1c;
-}
-
-
-.detalle-item strong {
-    display:
-        block;
-
-    font-size:
-        12px;
-
-    color:
-        #b91c1c;
-
-    margin-bottom:
-        4px;
-}
-
-
-.detalle-item span {
-    display:
-        block;
-
-    word-break:
-        break-word;
-
-    color:
-        #222;
-}
-
-
-/* =========================================================
-   COMENTARIOS
-   ========================================================= */
-
-.campo-comentario {
-    margin-top:
-        10px;
-}
-
-
-.campo-comentario textarea {
-    resize:
-        vertical;
-
-    margin-top:
-        7px;
-}
-
-
-/* =========================================================
-   ACCIONES
-   ========================================================= */
-
-.acciones-modal {
-    display:
-        flex;
-
-    justify-content:
-        flex-end;
-
-    gap:
-        10px;
-
-    margin-top:
-        20px;
-}
-
-
-/* =========================================================
-   RESPONSIVE
-   ========================================================= */
-
-@media (
-    max-width: 800px
-) {
-
-    .encabezado {
-        flex-direction:
-            column;
-
-        align-items:
-            flex-start;
-
-        gap:
-            15px;
-    }
-
-
-    .panel-busqueda {
-        grid-template-columns:
-            1fr;
-    }
-
-
-    .detalle-registro {
-        grid-template-columns:
-            1fr;
-    }
-
-
-    .contenedor {
-        padding:
-            10px;
-    }
-
-
-    .encabezado h1 {
-        font-size:
-            22px;
-    }
-
-
-    .resumen {
-        flex-wrap:
-            wrap;
-    }
-
-
-    .tarjeta {
-        width:
-            220px;
-
-        flex:
-            0 0 220px;
-    }
-
-
-    .acciones-modal {
-        flex-direction:
-            column;
-    }
-
-
-    .acciones-modal button {
-        width:
-            100%;
-    }
-
-}
+</html>
