@@ -52,7 +52,10 @@ window.onload =
             "administrador"
         ) {
 
-            // Tiene acceso a todo
+            /*
+             * ADMINISTRADOR
+             * Tiene acceso a todo.
+             */
 
             return;
 
@@ -68,11 +71,22 @@ window.onload =
             "coordinador"
         ) {
 
-            // No puede administrar usuarios
+            /*
+             * COORDINADOR
+             *
+             * Puede:
+             * - Estadísticas
+             * - Validaciones
+             * - Informes
+             *
+             * No puede:
+             * - Administrar usuarios
+             */
 
             ocultar(
                 "btnUsuarios"
             );
+
 
             return;
 
@@ -88,24 +102,39 @@ window.onload =
             "brigadista"
         ) {
 
-            // No puede administrar usuarios
+            /*
+             * No puede administrar usuarios
+             */
 
             ocultar(
                 "btnUsuarios"
             );
 
 
-            // No puede ver estadísticas
+            /*
+             * No puede ver estadísticas
+             */
 
             ocultar(
                 "btnEstadisticas"
             );
 
 
-            // No puede ver configuración
+            /*
+             * No puede ver validaciones
+             */
 
             ocultar(
                 "btnConfiguracion"
+            );
+
+
+            /*
+             * NO PUEDE VER INFORMES
+             */
+
+            ocultar(
+                "btnInformes"
             );
 
 
@@ -122,12 +151,19 @@ window.onload =
             "btnUsuarios"
         );
 
+
         ocultar(
             "btnEstadisticas"
         );
 
+
         ocultar(
             "btnConfiguracion"
+        );
+
+
+        ocultar(
+            "btnInformes"
         );
 
     };
