@@ -1,28 +1,48 @@
-function abrir(pagina){
+// ========================================
+// ABRIR PÁGINA
+// ========================================
 
-window.location=pagina;
+function abrir(pagina) {
 
-}
-
-
-
-function cerrarSesion(){
-
-localStorage.clear();
-
-window.location="index.html";
+    window.location = pagina;
 
 }
 
 
+// ========================================
+// CERRAR SESIÓN
+// ========================================
 
-let usuario=localStorage.getItem("usuario");
+function cerrarSesion() {
+
+    localStorage.clear();
+
+    window.location = "index.html";
+
+}
 
 
-if(usuario){
+// ========================================
+// MOSTRAR USUARIO ACTIVO
+// ========================================
 
-document.getElementById("usuarioActivo").innerHTML=
+let usuario =
+    localStorage.getItem("usuario");
 
-"Bienvenido: "+usuario;
+
+if (usuario) {
+
+    const elemento =
+        document.getElementById("usuarioActivo");
+
+
+    if (elemento) {
+
+        elemento.innerHTML =
+            "Bienvenido: " + usuario;
+
+    }
+
+}rio;
 
 }
