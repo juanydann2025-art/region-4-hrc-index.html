@@ -19,7 +19,6 @@ function ocultar(id) {
     const elemento =
         document.getElementById(id);
 
-
     if (elemento) {
 
         elemento.style.display =
@@ -34,7 +33,8 @@ function ocultar(id) {
 // VERIFICAR PERMISOS
 // ========================================
 
-window.onload =
+window.addEventListener(
+    "DOMContentLoaded",
     function () {
 
         console.log(
@@ -52,11 +52,6 @@ window.onload =
             "administrador"
         ) {
 
-            /*
-             * ADMINISTRADOR
-             * Tiene acceso a todo.
-             */
-
             return;
 
         }
@@ -71,22 +66,9 @@ window.onload =
             "coordinador"
         ) {
 
-            /*
-             * COORDINADOR
-             *
-             * Puede:
-             * - Estadísticas
-             * - Validaciones
-             * - Informes
-             *
-             * No puede:
-             * - Administrar usuarios
-             */
-
             ocultar(
                 "btnUsuarios"
             );
-
 
             return;
 
@@ -102,41 +84,25 @@ window.onload =
             "brigadista"
         ) {
 
-            /*
-             * No puede administrar usuarios
-             */
-
             ocultar(
                 "btnUsuarios"
             );
-
-
-            /*
-             * No puede ver estadísticas
-             */
 
             ocultar(
                 "btnEstadisticas"
             );
 
-
-            /*
-             * No puede ver validaciones
-             */
-
             ocultar(
                 "btnConfiguracion"
             );
-
-
-            /*
-             * NO PUEDE VER INFORMES
-             */
 
             ocultar(
                 "btnInformes"
             );
 
+            ocultar(
+                "btnSupervision"
+            );
 
             return;
 
@@ -151,19 +117,21 @@ window.onload =
             "btnUsuarios"
         );
 
-
         ocultar(
             "btnEstadisticas"
         );
-
 
         ocultar(
             "btnConfiguracion"
         );
 
-
         ocultar(
             "btnInformes"
         );
 
-    };
+        ocultar(
+            "btnSupervision"
+        );
+
+    }
+);

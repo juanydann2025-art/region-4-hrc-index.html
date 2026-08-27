@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Panel de Supervisión</title>
+
+<link rel="stylesheet" href="css/supervisor.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+</head>
+
+<body>
+
+<div class="contenedor">
+
+<header class="cabecera">
+
+<div class="titulo">
+
+<div class="icono-titulo">
+<i class="fa-solid fa-chart-line"></i>
+</div>
+
+<div>
+
+<h1>Panel de Supervisión</h1>
+
+<p id="usuarioSupervisor">
+Cargando usuario...
+</p>
+
+</div>
+
+</div>
+
+<div class="botones">
+
+<button
+class="btn actualizar"
+onclick="cargarSupervision()">
+
+<i class="fa-solid fa-rotate"></i>
+Actualizar
+
+</button>
+
+<button
+class="btn regresar"
+onclick="regresarMenu()">
+
+<i class="fa-solid fa-arrow-left"></i>
+Menú
+
+</button>
+
+</div>
+
+</header>
+
+
+<section class="resumen">
+
+<div class="tarjeta">
+
+<div class="tarjeta-icono">
+<i class="fa-solid fa-address-book"></i>
+</div>
+
+<div>
+
+<span>Lista Nominal</span>
+
+<strong id="totalListaNominal">0</strong>
+
+</div>
+
+</div>
+
+
+<div class="tarjeta">
+
+<div class="tarjeta-icono">
+<i class="fa-solid fa-users"></i>
+</div>
+
+<div>
+
+<span>Registrados</span>
+
+<strong id="totalRegistrados">0</strong>
+
+</div>
+
+</div>
+
+
+<div class="tarjeta">
+
+<div class="tarjeta-icono">
+<i class="fa-solid fa-hourglass-half"></i>
+</div>
+
+<div>
+
+<span>Pendientes por votar</span>
+
+<strong id="totalPendientes">0</strong>
+
+</div>
+
+</div>
+
+
+<div class="tarjeta">
+
+<div class="tarjeta-icono">
+<i class="fa-solid fa-check-circle"></i>
+</div>
+
+<div>
+
+<span>Ya votaron</span>
+
+<strong id="totalVotaron">0</strong>
+
+</div>
+
+</div>
+
+
+<div class="tarjeta avance">
+
+<div class="tarjeta-icono">
+<i class="fa-solid fa-chart-pie"></i>
+</div>
+
+<div>
+
+<span>Avance general</span>
+
+<strong id="avanceGeneral">0%</strong>
+
+</div>
+
+</div>
+
+</section>
+
+
+<section class="panel">
+
+<div class="panel-titulo">
+
+<div>
+
+<h2>
+<i class="fa-solid fa-route"></i>
+Avance por ruta
+</h2>
+
+<p>
+Resumen de lista nominal, registrados, avance y votación por ruta
+</p>
+
+</div>
+
+</div>
+
+
+<div class="tabla-contenedor">
+
+<table class="tabla">
+
+<thead>
+
+<tr>
+
+<th>Ruta</th>
+
+<th>Secciones</th>
+
+<th>Lista Nominal</th>
+
+<th>Registrados</th>
+
+<th>Avance</th>
+
+<th>Pendientes por votar</th>
+
+<th>Votaron</th>
+
+</tr>
+
+</thead>
+
+<tbody id="tablaRutas">
+
+<tr>
+
+<td colspan="7" class="cargando">
+
+<i class="fa-solid fa-spinner fa-spin"></i>
+
+Cargando rutas...
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</section>
+
+
+<div id="mensaje"></div>
+
+</div>
+
+
+<script src="js/supervisor.js"></script>
+
+</body>
+
+</html>
