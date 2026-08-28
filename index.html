@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="es">
 <head>
 
@@ -8,12 +9,15 @@
 name="viewport"
 content="width=device-width, initial-scale=1.0">
 
-<title>Sistema de Campaña</title>
+<title>Sistema de Campaña | Región 4</title>
 
-<link rel="stylesheet" href="css/estilos.css">
+<link
+  rel="stylesheet"
+  href="css/estilos.css">
 
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 </head>
 
@@ -21,78 +25,162 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
 
 <div class="login">
 
-<div class="logo">
+  <!-- ========================================= -->
 
-<img src="img/logo.png">
+  <!-- ENCABEZADO -->
 
-<h1>Sistema de Campaña</h1>
+  <!-- ========================================= -->
 
-<h1>Región 4</h1>
-<p>Responsable Horacio Schiavon Reyes</p>
+  <div class="logo">
+
+
+<div class="logo-imagen">
+
+  <img
+    src="img/logo.png"
+    alt="Logo">
+
 </div>
+
+<h1>
+  Sistema de Campaña
+</h1>
+
+<div class="region">
+  Región 4
+</div>
+
+<p>
+  Responsable
+  <strong>
+    Horacio Schiavon Reyes
+  </strong>
+</p>
+
+
+  </div>
+
+  <!-- ========================================= -->
+
+  <!-- FORMULARIO -->
+
+  <!-- ========================================= -->
+
+  <div class="formulario-login">
+
+
+<div class="bienvenida">
+
+  <h2>
+    Bienvenido
+  </h2>
+
+  <span>
+    Ingresa tus datos para continuar
+  </span>
+
+</div>
+
+
+<!-- USUARIO -->
 
 <div class="grupo">
 
-<label>
+  <label for="usuario">
+    Usuario
+  </label>
 
-Usuario
+  <div class="input">
 
-</label>
+    <i class="fa-solid fa-user"></i>
 
-<div class="input">
+    <input
+      type="text"
+      id="usuario"
+      placeholder="Escribe tu usuario"
+      autocomplete="username">
 
-<i class="fa fa-user"></i>
-
-<input
-type="text"
-id="usuario"
-placeholder="Usuario">
+  </div>
 
 </div>
 
-</div>
+
+<!-- CONTRASEÑA -->
 
 <div class="grupo">
 
-<label>
+  <label for="password">
+    Contraseña
+  </label>
 
-Contraseña
+  <div class="input">
 
-</label>
+    <i class="fa-solid fa-lock"></i>
 
-<div class="input">
+    <input
+      type="password"
+      id="password"
+      placeholder="Escribe tu contraseña"
+      autocomplete="current-password">
 
-<i class="fa fa-lock"></i>
+    <button
+      type="button"
+      id="ver"
+      aria-label="Mostrar contraseña">
 
-<input
-type="password"
-id="password"
-placeholder="Contraseña">
+      <i class="fa-solid fa-eye"></i>
 
-<button
-id="ver">
+    </button>
 
-<i class="fa fa-eye"></i>
-
-</button>
+  </div>
 
 </div>
 
-</div>
+
+<!-- BOTÓN -->
 
 <button
-id="login">
+  type="button"
+  id="login">
 
-Iniciar Sesión
+  <span>
+    Iniciar Sesión
+  </span>
+
+  <i class="fa-solid fa-arrow-right"></i>
 
 </button>
 
-<div id="mensaje"></div>
+
+<!-- MENSAJE -->
+
+<div
+  id="mensaje"
+  class="mensaje-login">
+</div>
+
+
+  </div>
+
+  <!-- ========================================= -->
+
+  <!-- PIE -->
+
+  <!-- ========================================= -->
+
+  <div class="login-footer">
+
+
+<i class="fa-solid fa-shield-halved"></i>
+
+Acceso exclusivo al sistema
+
+
+  </div>
 
 </div>
 
 <script src="js/login.js"></script>
 
 </body>
-
 </html>

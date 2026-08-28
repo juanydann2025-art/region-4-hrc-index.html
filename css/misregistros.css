@@ -34,7 +34,104 @@ body {
       #eef4fa
     );
 }
+/* ============================================================
+   BUSCADOR DE REGISTROS
+============================================================ */
 
+.buscador-registros {
+  width: 100%;
+  margin: 0 0 18px;
+  display: flex;
+  justify-content: center;
+}
+
+.buscador-contenedor {
+  width: 100%;
+  max-width: 620px;
+  position: relative;
+}
+
+.buscador-icono {
+  position: absolute;
+  left: 17px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #a00000;
+  font-size: 17px;
+  pointer-events: none;
+}
+
+#buscadorNombre {
+  width: 100%;
+  height: 50px;
+  border: 1px solid #e1e1e1;
+  border-radius: 14px;
+  background: #ffffff;
+  padding: 0 48px 0 48px;
+  font-size: 14px;
+  color: #222;
+  outline: none;
+  box-shadow: 0 4px 14px rgba(0,0,0,.06);
+  transition: all .2s ease;
+}
+
+#buscadorNombre::placeholder {
+  color: #999;
+}
+
+#buscadorNombre:focus {
+  border-color: #b00000;
+  box-shadow:
+    0 0 0 3px rgba(176,0,0,.10),
+    0 6px 18px rgba(0,0,0,.08);
+}
+
+.btn-limpiar-busqueda {
+  position: absolute;
+  right: 13px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 50%;
+  background: #f4f4f4;
+  color: #777;
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  transition: all .2s ease;
+}
+
+.btn-limpiar-busqueda:hover {
+  background: #fdecec;
+  color: #a00000;
+}
+
+.buscador-ayuda {
+  text-align: center;
+  margin-top: 7px;
+  font-size: 11px;
+  color: #888;
+}
+
+@media (max-width: 600px) {
+
+  .buscador-registros {
+    margin-bottom: 15px;
+  }
+
+  .buscador-contenedor {
+    max-width: 100%;
+  }
+
+  #buscadorNombre {
+    height: 47px;
+    font-size: 13px;
+  }
+
+}
 
 /* ============================================================
    CONTENEDOR
