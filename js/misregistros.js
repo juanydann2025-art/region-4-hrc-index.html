@@ -117,6 +117,7 @@ async function seleccionarCategoria(
       }
     );
 
+
   if (
     categoria === "avance"
   ) {
@@ -129,9 +130,11 @@ async function seleccionarCategoria(
 
   }
 
+
   construirSubPestanas(
     categoria
   );
+
 
   await cargarCategoria(
     categoria
@@ -201,12 +204,44 @@ function construirSubPestanas(
 
         </div>
 
+
+        <div class="buscador-registros">
+
+          <i class="fa-solid fa-magnifying-glass"></i>
+
+          <input
+            type="search"
+            id="buscadorNombre"
+            placeholder="Buscar ciudadano por nombre..."
+            autocomplete="off"
+            oninput="buscarPorNombre(this.value)"
+          >
+
+          <button
+            type="button"
+            class="btn-limpiar-busqueda"
+            onclick="limpiarBusqueda()"
+            title="Limpiar búsqueda"
+          >
+
+            <i class="fa-solid fa-xmark"></i>
+
+          </button>
+
+        </div>
+
       </div>
 
     `;
 
+
     filtros[categoria] =
       "todos";
+
+
+    filtros[categoria + "_busqueda"] =
+      "";
+
 
     return;
 
@@ -214,7 +249,94 @@ function construirSubPestanas(
 
 
   // ==============================================================
-  // PETICIONES, LONAS, BARDAS Y REUNIONES
+  // REUNIONES
+  // ==============================================================
+
+  if (
+    categoria === "reuniones"
+  ) {
+
+    cont.innerHTML = `
+
+      <div class="subpestanas-bloque">
+
+        <div class="subpestanas-botones">
+
+          <button
+            type="button"
+            class="subpestana activa"
+            onclick="aplicarFiltro('todos',this)"
+          >
+            Todos
+            <span id="cntTodosCategoria">0</span>
+          </button>
+
+          <button
+            type="button"
+            class="subpestana"
+            onclick="aplicarFiltro('pendientes',this)"
+          >
+            Pendientes
+            <span id="cntPendientesCategoria">0</span>
+          </button>
+
+          <button
+            type="button"
+            class="subpestana"
+            onclick="aplicarFiltro('realizados',this)"
+          >
+            Realizados
+            <span id="cntRealizadosCategoria">0</span>
+          </button>
+
+        </div>
+
+
+        <div class="buscador-registros">
+
+          <i class="fa-solid fa-user-check"></i>
+
+          <input
+            type="search"
+            id="buscadorNombre"
+            placeholder="Buscar por responsable o quien autoriza..."
+            autocomplete="off"
+            oninput="buscarPorNombre(this.value)"
+          >
+
+          <button
+            type="button"
+            class="btn-limpiar-busqueda"
+            onclick="limpiarBusqueda()"
+            title="Limpiar búsqueda"
+          >
+
+            <i class="fa-solid fa-xmark"></i>
+
+          </button>
+
+        </div>
+
+      </div>
+
+    `;
+
+
+    filtros[categoria] =
+      "todos";
+
+
+    filtros[categoria + "_busqueda"] =
+      "";
+
+
+    return;
+
+  }
+
+
+  // ==============================================================
+  // PETICIONES, LONAS Y BARDAS
   // ==============================================================
 
   cont.innerHTML = `
@@ -252,6 +374,7 @@ function construirSubPestanas(
 
       </div>
 
+
       <div class="buscador-registros">
 
         <i class="fa-solid fa-magnifying-glass"></i>
@@ -270,7 +393,9 @@ function construirSubPestanas(
           onclick="limpiarBusqueda()"
           title="Limpiar búsqueda"
         >
+
           <i class="fa-solid fa-xmark"></i>
+
         </button>
 
       </div>
@@ -305,9 +430,11 @@ async function cargarCategoria(
     return;
   }
 
+
   mostrarCargando(
     "Consultando registros..."
   );
+
 
   try {
 
@@ -398,6 +525,7 @@ async function cargarDatosCiudadanos() {
 
   }
 
+
   await cargarCategoria(
     "ciudadanos"
   );
@@ -446,7 +574,7 @@ function aplicarFiltro(
 
 
 // ================================================================
-// BUSCADOR POR NOMBRE
+// BUSCADOR
 // ================================================================
 
 function buscarPorNombre(
@@ -478,6 +606,7 @@ function limpiarBusqueda() {
     document.getElementById(
       "buscadorNombre"
     );
+
 
   if (input) {
 
@@ -613,43 +742,79 @@ function mostrarFiltrados() {
 
 
   // ==============================================================
-  // BUSCAR POR NOMBRE
+  // BUSCADOR
   // ==============================================================
 
-  if (
-    categoriaActual !== "ciudadanos"
-  ) {
-
-    const busqueda =
-      filtros[
-        categoriaActual + "_busqueda"
-      ] || "";
+  const busqueda =
+    filtros[
+      categoriaActual + "_busqueda"
+    ] || "";
 
 
-    if (busqueda) {
+  if (busqueda) {
 
-      lista =
-        lista.filter(
-          function(r) {
+    lista =
+      lista.filter(
+        function(r) {
 
-            const nombre =
+          let textoBuscar = "";
+
+
+          // ------------------------------------------------------
+          // CIUDADANOS
+          // ------------------------------------------------------
+
+          if (
+            categoriaActual === "ciudadanos"
+          ) {
+
+            textoBuscar =
+              r.nombre ||
+              "";
+
+          }
+
+
+          // ------------------------------------------------------
+          // REUNIONES
+          // ------------------------------------------------------
+
+          else if (
+            categoriaActual === "reuniones"
+          ) {
+
+            textoBuscar =
+              obtenerResponsableReunion(
+                r
+              );
+
+          }
+
+
+          // ------------------------------------------------------
+          // RESTO
+          // ------------------------------------------------------
+
+          else {
+
+            textoBuscar =
               obtenerNombreRegistro(
                 r
               );
 
-
-            return normalizar(
-              nombre
-            ).includes(
-              normalizar(
-                busqueda
-              )
-            );
-
           }
-        );
 
-    }
+
+          return normalizar(
+            textoBuscar
+          ).includes(
+            normalizar(
+              busqueda
+            )
+          );
+
+        }
+      );
 
   }
 
@@ -693,6 +858,41 @@ function obtenerNombreRegistro(
 
 
 // ================================================================
+// OBTENER RESPONSABLE DE REUNIÓN
+// ================================================================
+
+function obtenerResponsableReunion(
+  r
+) {
+
+  if (!r) {
+    return "";
+  }
+
+
+  return String(
+
+    r.quienAutoriza ||
+    r.quienautoriza ||
+    r.autoriza ||
+    r.responsableReunion ||
+    r.responsablereunion ||
+    r.responsable ||
+    r.responsableDeReunion ||
+    r.nombreResponsable ||
+    r.nombreResponsableReunion ||
+    r.responsableEvento ||
+    r.quienAutorizaReunion ||
+    r.autorizadoPor ||
+    r.nombre ||
+    ""
+
+  ).trim();
+
+}
+
+
+// ================================================================
 // CONTADORES
 // ================================================================
 
@@ -700,7 +900,6 @@ function actualizarContadores(
   categoria,
   registros
 ) {
-
 
   // ==============================================================
   // CIUDADANOS
@@ -776,7 +975,7 @@ function actualizarContadores(
 
 
   // ==============================================================
-  // LAS CUATRO CATEGORÍAS
+  // RESTO
   // ==============================================================
 
   let pendientes =
@@ -827,7 +1026,7 @@ function actualizarContadores(
 
 
 // ================================================================
-// RESUMEN
+// RESUMEN CIUDADANOS
 // ================================================================
 
 function actualizarResumenCiudadanos(
@@ -927,7 +1126,7 @@ function actualizarResumenCiudadanos(
 
 
 // ================================================================
-// AVISO
+// AVISO INACTIVIDAD
 // ================================================================
 
 function revisarInactividad(
@@ -1125,9 +1324,18 @@ function mostrarAvance() {
     );
 
 
-  document.getElementById(
-    "listaRegistros"
-  ).innerHTML = `
+  const cont =
+    document.getElementById(
+      "listaRegistros"
+    );
+
+
+  if (!cont) {
+    return;
+  }
+
+
+  cont.innerHTML = `
 
     <div class="avance-grid">
 
@@ -1255,7 +1463,7 @@ function mostrarAvance() {
 
 
 // ================================================================
-// RENDERIZAR
+// RENDERIZAR REGISTROS
 // ================================================================
 
 function renderRegistros(
@@ -1304,6 +1512,7 @@ function renderRegistros(
         titulo =
           "No hay pendientes";
 
+
         mensaje =
           "¡Excelente! No tienes registros pendientes por realizar.";
 
@@ -1316,6 +1525,7 @@ function renderRegistros(
 
         titulo =
           "No hay realizados";
+
 
         mensaje =
           "Todavía no tienes registros realizados en esta categoría.";
@@ -1336,8 +1546,31 @@ function renderRegistros(
         titulo =
           "Sin resultados";
 
+
         mensaje =
           `No se encontraron registros para "${busqueda}".`;
+
+      }
+
+    }
+    else {
+
+      const busqueda =
+        filtros[
+          categoria + "_busqueda"
+        ] || "";
+
+
+      if (
+        busqueda
+      ) {
+
+        titulo =
+          "Sin resultados";
+
+
+        mensaje =
+          `No se encontraron ciudadanos para "${busqueda}".`;
 
       }
 
@@ -1361,6 +1594,7 @@ function renderRegistros(
       </div>
 
     `;
+
 
     return;
 
@@ -1979,6 +2213,12 @@ function tarjetaGenerica(
   titulo
 ) {
 
+  const responsable =
+    categoriaActual === "reuniones"
+      ? obtenerResponsableReunion(r)
+      : obtenerNombreRegistro(r);
+
+
   return `
 
     <article class="registro">
@@ -2026,29 +2266,74 @@ function tarjetaGenerica(
           ${esc(r.fecha)}
         </span>
 
-        <span>
-          <b>Nombre:</b>
-          ${esc(
-            obtenerNombreRegistro(r) ||
-            "Sin nombre"
-          )}
-        </span>
+
+        ${
+          categoriaActual === "reuniones"
+
+          ? `
+
+            <span>
+              <b>Responsable / Autoriza:</b>
+              ${esc(
+                responsable ||
+                "Sin responsable"
+              )}
+            </span>
+
+          `
+
+          : `
+
+            <span>
+              <b>Nombre:</b>
+              ${esc(
+                responsable ||
+                "Sin nombre"
+              )}
+            </span>
+
+          `
+        }
+
 
         <span>
           <b>Sección:</b>
           ${esc(r.seccion)}
         </span>
 
+
         <span>
           <b>Comunidad:</b>
           ${esc(r.comunidad)}
         </span>
+
 
         <span>
           <b>Calle:</b>
           ${esc(r.calle)}
           ${esc(r.numero)}
         </span>
+
+
+        ${
+          categoriaActual === "reuniones"
+
+          ? `
+
+            <span>
+              <b>Responsable:</b>
+              ${esc(
+                r.responsable ||
+                r.responsableReunion ||
+                ""
+              )}
+            </span>
+
+          `
+
+          : ""
+
+        }
 
       </div>
 
@@ -2110,7 +2395,7 @@ function abrirModalRealizadoPorFolio(
 
 
 // ================================================================
-// ABRIR MODAL
+// ABRIR MODAL REALIZADO
 // ================================================================
 
 function abrirModalRealizado(
@@ -2346,8 +2631,10 @@ function previsualizarFotoRealizado(
       "Selecciona una imagen válida."
     );
 
+
     input.value =
       "";
+
 
     return;
 
@@ -2431,7 +2718,9 @@ async function guardarRealizado(
       "Selecciona la fecha de realización."
     );
 
+
     campoFecha?.focus();
+
 
     return;
 
@@ -2468,7 +2757,9 @@ async function guardarRealizado(
       "Debe escribir un comentario de realización."
     );
 
+
     campoComentario.focus();
+
 
     return;
 
@@ -2527,6 +2818,7 @@ async function guardarRealizado(
 
       btn.disabled =
         true;
+
 
       btn.innerHTML = `
 
@@ -2670,26 +2962,34 @@ async function guardarRealizado(
     registroRealizadoActual.realizado =
       "REALIZADO";
 
+
     registroRealizadoActual.estatusRealizado =
       "REALIZADO";
+
 
     registroRealizadoActual.estadoRealizado =
       "REALIZADO";
 
+
     registroRealizadoActual.fechaRealizado =
       fecha;
+
 
     registroRealizadoActual.fechaRealizacion =
       fecha;
 
+
     registroRealizadoActual.realizadoFecha =
       fecha;
+
 
     registroRealizadoActual.comentarioRealizado =
       comentario;
 
+
     registroRealizadoActual.comentario =
       comentario;
+
 
     registroRealizadoActual.realizadoComentario =
       comentario;
@@ -2702,14 +3002,18 @@ async function guardarRealizado(
       registroRealizadoActual.fotoRealizado =
         resultado.urlFoto;
 
+
       registroRealizadoActual.fotoEvidencia =
         resultado.urlFoto;
+
 
       registroRealizadoActual.evidencia =
         resultado.urlFoto;
 
+
       registroRealizadoActual.urlEvidencia =
         resultado.urlFoto;
+
 
       registroRealizadoActual.urlFotoRealizado =
         resultado.urlFoto;
@@ -2719,12 +3023,9 @@ async function guardarRealizado(
 
     cerrarModalRealizado();
 
+
     ocultarCargaGeneral();
 
-
-    // ============================================================
-    // RECARGAR CATEGORÍA
-    // ============================================================
 
     delete registrosCache[
       categoriaActual
@@ -2764,6 +3065,7 @@ async function guardarRealizado(
 
       btn.disabled =
         false;
+
 
       btn.innerHTML =
         textoOriginal;
@@ -3651,7 +3953,7 @@ function setText(
 
 
 // ================================================================
-// ESC
+// ESCAPE
 // ================================================================
 
 document.addEventListener(
@@ -3685,4 +3987,3 @@ function volverMenu() {
     "Menu.html";
 
 }
-
