@@ -157,38 +157,51 @@ function construirSubPestanas(
     return;
   }
 
+
+  // ==============================================================
+  // CIUDADANOS
+  // ==============================================================
+
   if (
     categoria === "ciudadanos"
   ) {
 
     cont.innerHTML = `
 
-      <button
-        type="button"
-        class="subpestana activa"
-        onclick="aplicarFiltro('todos',this)"
-      >
-        Todos
-        <span id="cntTodos">0</span>
-      </button>
+      <div class="subpestanas-bloque">
 
-      <button
-        type="button"
-        class="subpestana"
-        onclick="aplicarFiltro('pendientes',this)"
-      >
-        Pendientes por votar
-        <span id="cntPendientes">0</span>
-      </button>
+        <div class="subpestanas-botones">
 
-      <button
-        type="button"
-        class="subpestana"
-        onclick="aplicarFiltro('votaron',this)"
-      >
-        Votaron
-        <span id="cntVotaron">0</span>
-      </button>
+          <button
+            type="button"
+            class="subpestana activa"
+            onclick="aplicarFiltro('todos',this)"
+          >
+            Todos
+            <span id="cntTodos">0</span>
+          </button>
+
+          <button
+            type="button"
+            class="subpestana"
+            onclick="aplicarFiltro('pendientes',this)"
+          >
+            Pendientes por votar
+            <span id="cntPendientes">0</span>
+          </button>
+
+          <button
+            type="button"
+            class="subpestana"
+            onclick="aplicarFiltro('votaron',this)"
+          >
+            Votaron
+            <span id="cntVotaron">0</span>
+          </button>
+
+        </div>
+
+      </div>
 
     `;
 
@@ -199,28 +212,80 @@ function construirSubPestanas(
 
   }
 
+
+  // ==============================================================
+  // PETICIONES, LONAS, BARDAS Y REUNIONES
+  // ==============================================================
+
   cont.innerHTML = `
 
-    <button
-      type="button"
-      class="subpestana activa"
-      onclick="aplicarFiltro('todos',this)"
-    >
-      Todos
-    </button>
+    <div class="subpestanas-bloque">
 
-    <button
-      type="button"
-      class="subpestana"
-      onclick="aplicarFiltro('pendientes',this)"
-    >
-      Pendientes
-    </button>
+      <div class="subpestanas-botones">
+
+        <button
+          type="button"
+          class="subpestana activa"
+          onclick="aplicarFiltro('todos',this)"
+        >
+          Todos
+          <span id="cntTodosCategoria">0</span>
+        </button>
+
+        <button
+          type="button"
+          class="subpestana"
+          onclick="aplicarFiltro('pendientes',this)"
+        >
+          Pendientes
+          <span id="cntPendientesCategoria">0</span>
+        </button>
+
+        <button
+          type="button"
+          class="subpestana"
+          onclick="aplicarFiltro('realizados',this)"
+        >
+          Realizados
+          <span id="cntRealizadosCategoria">0</span>
+        </button>
+
+      </div>
+
+      <div class="buscador-registros">
+
+        <i class="fa-solid fa-magnifying-glass"></i>
+
+        <input
+          type="search"
+          id="buscadorNombre"
+          placeholder="Buscar por nombre..."
+          autocomplete="off"
+          oninput="buscarPorNombre(this.value)"
+        >
+
+        <button
+          type="button"
+          class="btn-limpiar-busqueda"
+          onclick="limpiarBusqueda()"
+          title="Limpiar búsqueda"
+        >
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+
+      </div>
+
+    </div>
 
   `;
 
+
   filtros[categoria] =
     "todos";
+
+
+  filtros[categoria + "_busqueda"] =
+    "";
 
 }
 
@@ -260,6 +325,7 @@ async function cargarCategoria(
 
       });
 
+
     if (
       !resultado ||
       !resultado.ok
@@ -272,12 +338,15 @@ async function cargarCategoria(
 
     }
 
+
     const registros =
       resultado.registros ||
       [];
 
+
     registrosCache[categoria] =
       registros;
+
 
     if (
       categoria === "ciudadanos"
@@ -293,10 +362,12 @@ async function cargarCategoria(
 
     }
 
+
     actualizarContadores(
       categoria,
       registros
     );
+
 
     mostrarFiltrados();
 
@@ -346,6 +417,7 @@ function aplicarFiltro(
   filtros[categoriaActual] =
     filtro;
 
+
   document
     .querySelectorAll(".subpestana")
     .forEach(
@@ -358,6 +430,7 @@ function aplicarFiltro(
       }
     );
 
+
   if (boton) {
 
     boton.classList.add(
@@ -365,6 +438,60 @@ function aplicarFiltro(
     );
 
   }
+
+
+  mostrarFiltrados();
+
+}
+
+
+// ================================================================
+// BUSCADOR POR NOMBRE
+// ================================================================
+
+function buscarPorNombre(
+  texto
+) {
+
+  filtros[
+    categoriaActual + "_busqueda"
+  ] =
+    String(
+      texto || ""
+    )
+      .trim()
+      .toLowerCase();
+
+
+  mostrarFiltrados();
+
+}
+
+
+// ================================================================
+// LIMPIAR BÚSQUEDA
+// ================================================================
+
+function limpiarBusqueda() {
+
+  const input =
+    document.getElementById(
+      "buscadorNombre"
+    );
+
+  if (input) {
+
+    input.value =
+      "";
+
+  }
+
+
+  filtros[
+    categoriaActual + "_busqueda"
+  ] =
+    "";
+
 
   mostrarFiltrados();
 
@@ -382,13 +509,20 @@ function mostrarFiltrados() {
       categoriaActual
     ] || [];
 
+
   const filtro =
     filtros[
       categoriaActual
     ] || "todos";
 
+
   let lista =
     registros;
+
+
+  // ==============================================================
+  // CIUDADANOS
+  // ==============================================================
 
   if (
     categoriaActual === "ciudadanos"
@@ -405,6 +539,7 @@ function mostrarFiltrados() {
               "PENDIENTE"
             );
 
+
           if (
             filtro === "pendientes"
           ) {
@@ -415,6 +550,7 @@ function mostrarFiltrados() {
             );
 
           }
+
 
           if (
             filtro === "votaron"
@@ -427,38 +563,131 @@ function mostrarFiltrados() {
 
           }
 
+
           return true;
 
         }
       );
 
   }
-  else if (
-    filtro === "pendientes"
-  ) {
 
-    lista =
-      registros.filter(
-        function(r) {
 
-          return (
-            normalizar(
-              r.estatus ||
-              r.estado ||
-              "PENDIENTE"
-            ) ===
-            "pendiente"
-          );
+  // ==============================================================
+  // PETICIONES / LONAS / BARDAS / REUNIONES
+  // ==============================================================
 
-        }
-      );
+  else {
+
+    if (
+      filtro === "pendientes"
+    ) {
+
+      lista =
+        registros.filter(
+          function(r) {
+
+            return !estaRealizado(r);
+
+          }
+        );
+
+    }
+
+
+    else if (
+      filtro === "realizados"
+    ) {
+
+      lista =
+        registros.filter(
+          function(r) {
+
+            return estaRealizado(r);
+
+          }
+        );
+
+    }
 
   }
+
+
+  // ==============================================================
+  // BUSCAR POR NOMBRE
+  // ==============================================================
+
+  if (
+    categoriaActual !== "ciudadanos"
+  ) {
+
+    const busqueda =
+      filtros[
+        categoriaActual + "_busqueda"
+      ] || "";
+
+
+    if (busqueda) {
+
+      lista =
+        lista.filter(
+          function(r) {
+
+            const nombre =
+              obtenerNombreRegistro(
+                r
+              );
+
+
+            return normalizar(
+              nombre
+            ).includes(
+              normalizar(
+                busqueda
+              )
+            );
+
+          }
+        );
+
+    }
+
+  }
+
 
   renderRegistros(
     lista,
     categoriaActual
   );
+
+}
+
+
+// ================================================================
+// OBTENER NOMBRE DEL REGISTRO
+// ================================================================
+
+function obtenerNombreRegistro(
+  r
+) {
+
+  if (!r) {
+    return "";
+  }
+
+
+  return String(
+
+    r.nombre ||
+    r.nombreCiudadano ||
+    r.solicitante ||
+    r.persona ||
+    r.contacto ||
+    r.nombreContacto ||
+    r.beneficiario ||
+    r.responsable ||
+    ""
+
+  ).trim();
 
 }
 
@@ -472,36 +701,99 @@ function actualizarContadores(
   registros
 ) {
 
+
+  // ==============================================================
+  // CIUDADANOS
+  // ==============================================================
+
   if (
-    categoria !== "ciudadanos"
+    categoria === "ciudadanos"
   ) {
+
+    let pendientes =
+      0;
+
+    let votaron =
+      0;
+
+
+    registros.forEach(
+      function(r) {
+
+        const voto =
+          normalizar(
+            r.votar ||
+            r.voto ||
+            "PENDIENTE"
+          );
+
+
+        if (
+          voto === "si" ||
+          voto === "voto"
+        ) {
+
+          votaron++;
+
+        }
+        else {
+
+          pendientes++;
+
+        }
+
+      }
+    );
+
+
+    setText(
+      "cntTodos",
+      registros.length
+    );
+
+
+    setText(
+      "cntPendientes",
+      pendientes
+    );
+
+
+    setText(
+      "cntVotaron",
+      votaron
+    );
+
+
+    setText(
+      "totalVotaron",
+      votaron
+    );
+
 
     return;
 
   }
 
+
+  // ==============================================================
+  // LAS CUATRO CATEGORÍAS
+  // ==============================================================
+
   let pendientes =
     0;
 
-  let votaron =
+  let realizados =
     0;
+
 
   registros.forEach(
     function(r) {
 
-      const voto =
-        normalizar(
-          r.votar ||
-          r.voto ||
-          "PENDIENTE"
-        );
-
       if (
-        voto === "si" ||
-        voto === "voto"
+        estaRealizado(r)
       ) {
 
-        votaron++;
+        realizados++;
 
       }
       else {
@@ -513,24 +805,22 @@ function actualizarContadores(
     }
   );
 
+
   setText(
-    "cntTodos",
+    "cntTodosCategoria",
     registros.length
   );
 
+
   setText(
-    "cntPendientes",
+    "cntPendientesCategoria",
     pendientes
   );
 
-  setText(
-    "cntVotaron",
-    votaron
-  );
 
   setText(
-    "totalVotaron",
-    votaron
+    "cntRealizadosCategoria",
+    realizados
   );
 
 }
@@ -547,6 +837,7 @@ function actualizarResumenCiudadanos(
   const total =
     registros.length;
 
+
   const porcentaje =
     Math.min(
       100,
@@ -556,6 +847,7 @@ function actualizarResumenCiudadanos(
       ) * 100
     );
 
+
   const faltan =
     Math.max(
       0,
@@ -563,30 +855,36 @@ function actualizarResumenCiudadanos(
       total
     );
 
+
   setText(
     "totalCiudadanos",
     `${total} / ${META_CIUDADANOS}`
   );
+
 
   setText(
     "porcentajeAvance",
     `${porcentaje.toFixed(1)}%`
   );
 
+
   setText(
     "faltanCiudadanos",
     faltan
   );
+
 
   setText(
     "textoProgreso",
     `${total} de ${META_CIUDADANOS}`
   );
 
+
   const barra =
     document.getElementById(
       "barraProgreso"
     );
+
 
   if (barra) {
 
@@ -594,6 +892,7 @@ function actualizarResumenCiudadanos(
       `${porcentaje}%`;
 
   }
+
 
   if (
     total >= META_CIUDADANOS
@@ -640,9 +939,11 @@ function revisarInactividad(
       "avisoInactividad"
     );
 
+
   if (!aviso) {
     return;
   }
+
 
   if (
     !registros ||
@@ -656,6 +957,7 @@ function revisarInactividad(
     return;
 
   }
+
 
   const fechas =
     registros
@@ -677,6 +979,7 @@ function revisarInactividad(
         }
       );
 
+
   if (!fechas.length) {
 
     aviso.classList.add(
@@ -687,8 +990,10 @@ function revisarInactividad(
 
   }
 
+
   const ultima =
     fechas[0];
+
 
   const dias =
     (
@@ -696,6 +1001,7 @@ function revisarInactividad(
       ultima.getTime()
     ) /
     86400000;
+
 
   if (
     dias >= 2
@@ -728,6 +1034,7 @@ function cerrarAviso() {
       "avisoInactividad"
     );
 
+
   if (aviso) {
 
     aviso.classList.add(
@@ -750,6 +1057,7 @@ function mostrarAvance() {
       "subPestanas"
     );
 
+
   if (sub) {
 
     sub.innerHTML =
@@ -757,15 +1065,19 @@ function mostrarAvance() {
 
   }
 
+
   const registros =
     registrosCache.ciudadanos ||
     [];
 
+
   const total =
     registros.length;
 
+
   let votaron =
     0;
+
 
   registros.forEach(
     function(r) {
@@ -776,6 +1088,7 @@ function mostrarAvance() {
           r.voto ||
           ""
         );
+
 
       if (
         voto === "si" ||
@@ -789,9 +1102,11 @@ function mostrarAvance() {
     }
   );
 
+
   const pendientes =
     total -
     votaron;
+
 
   const porcentaje =
     Math.min(
@@ -801,12 +1116,14 @@ function mostrarAvance() {
       100
     );
 
+
   const faltan =
     Math.max(
       0,
       META_CIUDADANOS -
       total
     );
+
 
   document.getElementById(
     "listaRegistros"
@@ -830,6 +1147,7 @@ function mostrarAvance() {
 
       </div>
 
+
       <div class="avance-box">
 
         <span>
@@ -841,6 +1159,7 @@ function mostrarAvance() {
         </strong>
 
       </div>
+
 
       <div class="avance-box">
 
@@ -854,6 +1173,7 @@ function mostrarAvance() {
 
       </div>
 
+
       <div class="avance-box">
 
         <span>
@@ -865,6 +1185,7 @@ function mostrarAvance() {
         </strong>
 
       </div>
+
 
       <div class="avance-box">
 
@@ -879,6 +1200,7 @@ function mostrarAvance() {
       </div>
 
     </div>
+
 
     <div class="avance-detalle">
 
@@ -902,6 +1224,7 @@ function mostrarAvance() {
 
       </div>
 
+
       <div class="barra grande">
 
         <div
@@ -909,6 +1232,7 @@ function mostrarAvance() {
         ></div>
 
       </div>
+
 
       <p>
 
@@ -944,14 +1268,81 @@ function renderRegistros(
       "listaRegistros"
     );
 
+
   if (!cont) {
     return;
   }
+
 
   if (
     !registros ||
     !registros.length
   ) {
+
+    const filtro =
+      filtros[
+        categoria
+      ] || "todos";
+
+
+    let titulo =
+      "No hay registros";
+
+
+    let mensaje =
+      "No existen registros en esta categoría o filtro.";
+
+
+    if (
+      categoria !== "ciudadanos"
+    ) {
+
+      if (
+        filtro === "pendientes"
+      ) {
+
+        titulo =
+          "No hay pendientes";
+
+        mensaje =
+          "¡Excelente! No tienes registros pendientes por realizar.";
+
+      }
+
+
+      if (
+        filtro === "realizados"
+      ) {
+
+        titulo =
+          "No hay realizados";
+
+        mensaje =
+          "Todavía no tienes registros realizados en esta categoría.";
+
+      }
+
+
+      const busqueda =
+        filtros[
+          categoria + "_busqueda"
+        ] || "";
+
+
+      if (
+        busqueda
+      ) {
+
+        titulo =
+          "Sin resultados";
+
+        mensaje =
+          `No se encontraron registros para "${busqueda}".`;
+
+      }
+
+    }
+
 
     cont.innerHTML = `
 
@@ -960,11 +1351,11 @@ function renderRegistros(
         <i class="fa-regular fa-folder-open"></i>
 
         <h3>
-          No hay registros
+          ${esc(titulo)}
         </h3>
 
         <p>
-          No existen registros en esta categoría o filtro.
+          ${esc(mensaje)}
         </p>
 
       </div>
@@ -974,6 +1365,7 @@ function renderRegistros(
     return;
 
   }
+
 
   cont.innerHTML =
     registros
@@ -991,6 +1383,7 @@ function renderRegistros(
 
           }
 
+
           if (
             categoria === "peticiones"
           ) {
@@ -1000,6 +1393,7 @@ function renderRegistros(
             );
 
           }
+
 
           if (
             categoria === "operaciones"
@@ -1011,6 +1405,7 @@ function renderRegistros(
 
           }
 
+
           if (
             categoria === "bardas"
           ) {
@@ -1021,6 +1416,7 @@ function renderRegistros(
 
           }
 
+
           if (
             categoria === "reuniones"
           ) {
@@ -1030,6 +1426,7 @@ function renderRegistros(
             );
 
           }
+
 
           return "";
 
@@ -1068,6 +1465,7 @@ function estaRealizado(
     obtenerEstadoRealizacion(
       r
     );
+
 
   return (
     estado === "realizado" ||
@@ -1113,17 +1511,20 @@ function htmlRealizacion(
 
   }
 
+
   const fecha =
     r.fechaRealizado ||
     r.fechaRealizacion ||
     r.realizadoFecha ||
     "";
 
+
   const comentario =
     r.comentarioRealizado ||
     r.comentario ||
     r.realizadoComentario ||
     "";
+
 
   const foto =
     r.fotoRealizado ||
@@ -1132,6 +1533,7 @@ function htmlRealizacion(
     r.urlEvidencia ||
     r.urlFotoRealizado ||
     "";
+
 
   return `
 
@@ -1161,6 +1563,7 @@ function htmlRealizacion(
 
       </div>
 
+
       ${
         comentario
           ? `
@@ -1171,6 +1574,7 @@ function htmlRealizacion(
           `
           : ""
       }
+
 
       ${
         foto
@@ -1213,9 +1617,11 @@ function tarjetaCiudadano(
       "PENDIENTE"
     );
 
+
   const votado =
     voto === "si" ||
     voto === "voto";
+
 
   return `
 
@@ -1245,9 +1651,11 @@ function tarjetaCiudadano(
 
       </div>
 
+
       <h3>
         ${esc(r.nombre || "Sin nombre")}
       </h3>
+
 
       <div class="datos">
 
@@ -1284,6 +1692,7 @@ function tarjetaCiudadano(
 
       </div>
 
+
       <div class="registro-pie">
 
         <span>
@@ -1293,6 +1702,7 @@ function tarjetaCiudadano(
           ${esc(r.fecha || "")}
 
         </span>
+
 
         <button
           type="button"
@@ -1347,6 +1757,7 @@ function tarjetaPeticion(
           ${esc(r.folio)}
         </span>
 
+
         <span class="estado ${
           estaRealizado(r)
             ? "realizado"
@@ -1367,6 +1778,7 @@ function tarjetaPeticion(
 
       </div>
 
+
       <h3>
         ${esc(
           r.tipo ||
@@ -1374,11 +1786,20 @@ function tarjetaPeticion(
         )}
       </h3>
 
+
       <div class="datos">
 
         <span>
           <b>Fecha:</b>
           ${esc(r.fecha)}
+        </span>
+
+        <span>
+          <b>Nombre:</b>
+          ${esc(
+            obtenerNombreRegistro(r) ||
+            "Sin nombre"
+          )}
         </span>
 
         <span>
@@ -1404,6 +1825,7 @@ function tarjetaPeticion(
         </span>
 
       </div>
+
 
       ${htmlRealizacion(r)}
 
@@ -1448,6 +1870,7 @@ function tarjetaBarda(
           ${esc(r.folio)}
         </span>
 
+
         <span class="estado ${
           estaRealizado(r)
             ? "realizado"
@@ -1468,6 +1891,7 @@ function tarjetaBarda(
 
       </div>
 
+
       <h3>
         ${esc(
           r.tipo ||
@@ -1475,11 +1899,20 @@ function tarjetaBarda(
         )}
       </h3>
 
+
       <div class="datos">
 
         <span>
           <b>Fecha:</b>
           ${esc(r.fecha)}
+        </span>
+
+        <span>
+          <b>Nombre:</b>
+          ${esc(
+            obtenerNombreRegistro(r) ||
+            "Sin nombre"
+          )}
         </span>
 
         <span>
@@ -1510,6 +1943,7 @@ function tarjetaBarda(
         </span>
 
       </div>
+
 
       ${htmlRealizacion(r)}
 
@@ -1555,6 +1989,7 @@ function tarjetaGenerica(
           ${esc(r.folio)}
         </span>
 
+
         <span class="estado ${
           estaRealizado(r)
             ? "realizado"
@@ -1575,6 +2010,7 @@ function tarjetaGenerica(
 
       </div>
 
+
       <h3>
         ${esc(
           r.tipo ||
@@ -1582,11 +2018,20 @@ function tarjetaGenerica(
         )}
       </h3>
 
+
       <div class="datos">
 
         <span>
           <b>Fecha:</b>
           ${esc(r.fecha)}
+        </span>
+
+        <span>
+          <b>Nombre:</b>
+          ${esc(
+            obtenerNombreRegistro(r) ||
+            "Sin nombre"
+          )}
         </span>
 
         <span>
@@ -1606,6 +2051,7 @@ function tarjetaGenerica(
         </span>
 
       </div>
+
 
       ${htmlRealizacion(r)}
 
@@ -1629,6 +2075,7 @@ function abrirModalRealizadoPorFolio(
       categoriaActual
     ] || [];
 
+
   const registro =
     registros.find(
       function(r) {
@@ -1642,6 +2089,7 @@ function abrirModalRealizadoPorFolio(
       }
     );
 
+
   if (!registro) {
 
     alert(
@@ -1651,6 +2099,7 @@ function abrirModalRealizadoPorFolio(
     return;
 
   }
+
 
   abrirModalRealizado(
     registro,
@@ -1672,23 +2121,28 @@ function abrirModalRealizado(
   registroRealizadoActual =
     registro;
 
+
   const modal =
     document.getElementById(
       "modalRealizado"
     );
 
+
   if (!modal) {
     return;
   }
+
 
   const folio =
     registro.folio ||
     "";
 
+
   const info =
     document.getElementById(
       "infoRegistroRealizado"
     );
+
 
   if (info) {
 
@@ -1710,25 +2164,30 @@ function abrirModalRealizado(
 
   }
 
+
   setValue(
     "realizadoFolio",
     folio
   );
+
 
   setValue(
     "realizadoCategoria",
     categoria
   );
 
+
   setValue(
     "realizadoFila",
     registro.fila || ""
   );
 
+
   const fecha =
     document.getElementById(
       "realizadoFecha"
     );
+
 
   if (fecha) {
 
@@ -1737,10 +2196,12 @@ function abrirModalRealizado(
 
   }
 
+
   const comentario =
     document.getElementById(
       "realizadoComentario"
     );
+
 
   if (comentario) {
 
@@ -1749,10 +2210,12 @@ function abrirModalRealizado(
 
   }
 
+
   const foto =
     document.getElementById(
       "realizadoFoto"
     );
+
 
   if (foto) {
 
@@ -1761,10 +2224,12 @@ function abrirModalRealizado(
 
   }
 
+
   const preview =
     document.getElementById(
       "previewFotoRealizado"
     );
+
 
   if (preview) {
 
@@ -1784,9 +2249,11 @@ function abrirModalRealizado(
 
   }
 
+
   modal.classList.remove(
     "oculto"
   );
+
 
   document.body.style.overflow =
     "hidden";
@@ -1805,6 +2272,7 @@ function cerrarModalRealizado() {
       "modalRealizado"
     );
 
+
   if (modal) {
 
     modal.classList.add(
@@ -1813,8 +2281,10 @@ function cerrarModalRealizado() {
 
   }
 
+
   document.body.style.overflow =
     "";
+
 
   registroRealizadoActual =
     null;
@@ -1835,12 +2305,15 @@ function previsualizarFotoRealizado(
       "previewFotoRealizado"
     );
 
+
   if (!preview) {
     return;
   }
 
+
   const archivo =
     input?.files?.[0];
+
 
   if (!archivo) {
 
@@ -1862,6 +2335,7 @@ function previsualizarFotoRealizado(
 
   }
 
+
   if (
     !archivo.type.startsWith(
       "image/"
@@ -1879,10 +2353,12 @@ function previsualizarFotoRealizado(
 
   }
 
+
   const url =
     URL.createObjectURL(
       archivo
     );
+
 
   preview.innerHTML = `
 
@@ -1906,22 +2382,6 @@ async function guardarRealizado(
 
   event.preventDefault();
 
-  console.log(
-    "========================================"
-  );
-
-  console.log(
-    "GUARDAR REALIZADO - INICIANDO"
-  );
-
-  console.log(
-    "========================================"
-  );
-
-
-  // --------------------------------------------------------------
-  // VERIFICAR REGISTRO
-  // --------------------------------------------------------------
 
   if (!registroRealizadoActual) {
 
@@ -1934,14 +2394,11 @@ async function guardarRealizado(
   }
 
 
-  // --------------------------------------------------------------
-  // FORMULARIO
-  // --------------------------------------------------------------
-
   const formulario =
     document.getElementById(
       "formRealizado"
     );
+
 
   if (!formulario) {
 
@@ -1954,14 +2411,11 @@ async function guardarRealizado(
   }
 
 
-  // --------------------------------------------------------------
-  // FECHA
-  // --------------------------------------------------------------
-
   const campoFecha =
     document.getElementById(
       "realizadoFecha"
     );
+
 
   const fecha =
     campoFecha
@@ -1984,14 +2438,11 @@ async function guardarRealizado(
   }
 
 
-  // --------------------------------------------------------------
-  // COMENTARIO
-  // --------------------------------------------------------------
-
   const campoComentario =
     document.getElementById(
       "realizadoComentario"
     );
+
 
   if (!campoComentario) {
 
@@ -2004,8 +2455,6 @@ async function guardarRealizado(
   }
 
 
-  // TOMAR DIRECTAMENTE EL VALOR DEL TEXTAREA
-
   const comentario =
     String(
       campoComentario.value || ""
@@ -2013,29 +2462,7 @@ async function guardarRealizado(
       .trim();
 
 
-  console.log(
-    "CAMPO COMENTARIO:",
-    campoComentario
-  );
-
-  console.log(
-    "VALOR ORIGINAL:",
-    campoComentario.value
-  );
-
-  console.log(
-    "COMENTARIO FINAL:",
-    comentario
-  );
-
-
-  // --------------------------------------------------------------
-  // VALIDAR COMENTARIO
-  // --------------------------------------------------------------
-
-  if (
-    !comentario
-  ) {
+  if (!comentario) {
 
     alert(
       "Debe escribir un comentario de realización."
@@ -2047,10 +2474,6 @@ async function guardarRealizado(
 
   }
 
-
-  // --------------------------------------------------------------
-  // FOLIO
-  // --------------------------------------------------------------
 
   const folio =
     String(
@@ -2080,24 +2503,17 @@ async function guardarRealizado(
   }
 
 
-  // --------------------------------------------------------------
-  // FOTO
-  // --------------------------------------------------------------
-
   const fotoInput =
     document.getElementById(
       "realizadoFoto"
     );
 
 
-  // --------------------------------------------------------------
-  // BOTÓN
-  // --------------------------------------------------------------
-
   const btn =
     document.getElementById(
       "btnGuardarRealizado"
     );
+
 
   const textoOriginal =
     btn
@@ -2127,10 +2543,6 @@ async function guardarRealizado(
       "Guardando realización..."
     );
 
-
-    // ------------------------------------------------------------
-    // FOTO
-    // ------------------------------------------------------------
 
     let fotoBase64 =
       "";
@@ -2184,10 +2596,6 @@ async function guardarRealizado(
     }
 
 
-    // ------------------------------------------------------------
-    // DATOS
-    // ------------------------------------------------------------
-
     const usuario =
       obtenerUsuario();
 
@@ -2236,47 +2644,11 @@ async function guardarRealizado(
     };
 
 
-    console.log(
-      "========================================"
-    );
-
-    console.log(
-      "DATOS A ENVIAR AL APPS SCRIPT:"
-    );
-
-    console.log(
-      datosEnviar
-    );
-
-    console.log(
-      "COMENTARIO ENVIADO:",
-      datosEnviar.comentarioRealizado
-    );
-
-    console.log(
-      "========================================"
-    );
-
-
-    // ------------------------------------------------------------
-    // ENVIAR
-    // ------------------------------------------------------------
-
     const resultado =
       await postJSON(
         datosEnviar
       );
 
-
-    console.log(
-      "RESPUESTA APPS SCRIPT:",
-      resultado
-    );
-
-
-    // ------------------------------------------------------------
-    // RESPUESTA
-    // ------------------------------------------------------------
 
     if (
       !resultado ||
@@ -2291,9 +2663,9 @@ async function guardarRealizado(
     }
 
 
-    // ------------------------------------------------------------
+    // ============================================================
     // ACTUALIZAR CACHE
-    // ------------------------------------------------------------
+    // ============================================================
 
     registroRealizadoActual.realizado =
       "REALIZADO";
@@ -2345,18 +2717,14 @@ async function guardarRealizado(
     }
 
 
-    // ------------------------------------------------------------
-    // CERRAR
-    // ------------------------------------------------------------
-
     cerrarModalRealizado();
 
     ocultarCargaGeneral();
 
 
-    // ------------------------------------------------------------
-    // RECARGAR
-    // ------------------------------------------------------------
+    // ============================================================
+    // RECARGAR CATEGORÍA
+    // ============================================================
 
     delete registrosCache[
       categoriaActual
@@ -2372,7 +2740,6 @@ async function guardarRealizado(
       "El registro fue marcado como realizado correctamente."
     );
 
-
   }
   catch(error) {
 
@@ -2381,7 +2748,9 @@ async function guardarRealizado(
       error
     );
 
+
     ocultarCargaGeneral();
+
 
     alert(
       error?.message ||
@@ -2420,6 +2789,7 @@ function convertirArchivoBase64(
       const lector =
         new FileReader();
 
+
       lector.onload =
         function() {
 
@@ -2428,8 +2798,10 @@ function convertirArchivoBase64(
               lector.result || ""
             );
 
+
           const separador =
             resultado.indexOf(",");
+
 
           if (
             separador >= 0
@@ -2452,6 +2824,7 @@ function convertirArchivoBase64(
 
         };
 
+
       lector.onerror =
         function() {
 
@@ -2462,6 +2835,7 @@ function convertirArchivoBase64(
           );
 
         };
+
 
       lector.readAsDataURL(
         archivo
@@ -2497,6 +2871,7 @@ function abrirModalEvidencia(
       categoriaActual
     ] || [];
 
+
   const registro =
     registros.find(
       function(r) {
@@ -2510,6 +2885,7 @@ function abrirModalEvidencia(
       }
     );
 
+
   if (!registro) {
 
     alert(
@@ -2520,6 +2896,7 @@ function abrirModalEvidencia(
 
   }
 
+
   const foto =
     registro.fotoRealizado ||
     registro.fotoEvidencia ||
@@ -2527,6 +2904,7 @@ function abrirModalEvidencia(
     registro.urlEvidencia ||
     registro.urlFotoRealizado ||
     "";
+
 
   if (!foto) {
 
@@ -2538,27 +2916,33 @@ function abrirModalEvidencia(
 
   }
 
+
   const modal =
     document.getElementById(
       "modalEvidencia"
     );
+
 
   const imagen =
     document.getElementById(
       "imagenEvidencia"
     );
 
+
   const info =
     document.getElementById(
       "infoEvidencia"
     );
 
+
   if (!modal || !imagen) {
     return;
   }
 
+
   imagen.src =
     foto;
+
 
   if (info) {
 
@@ -2584,9 +2968,11 @@ function abrirModalEvidencia(
 
   }
 
+
   modal.classList.remove(
     "oculto"
   );
+
 
   document.body.style.overflow =
     "hidden";
@@ -2605,6 +2991,7 @@ function cerrarModalEvidencia() {
       "modalEvidencia"
     );
 
+
   if (modal) {
 
     modal.classList.add(
@@ -2613,10 +3000,12 @@ function cerrarModalEvidencia() {
 
   }
 
+
   const imagen =
     document.getElementById(
       "imagenEvidencia"
     );
+
 
   if (imagen) {
 
@@ -2624,6 +3013,7 @@ function cerrarModalEvidencia() {
       "";
 
   }
+
 
   document.body.style.overflow =
     "";
@@ -2643,6 +3033,7 @@ async function cambiarVotacionPorFolio(
     registrosCache.ciudadanos ||
     [];
 
+
   const r =
     registros.find(
       function(registro) {
@@ -2655,6 +3046,7 @@ async function cambiarVotacionPorFolio(
 
       }
     );
+
 
   if (!r) {
 
@@ -2754,7 +3146,6 @@ async function cambiarVotacionPorFolio(
 
     mostrarFiltrados();
 
-
   }
   catch(error) {
 
@@ -2844,6 +3235,7 @@ async function postJSON(
       texto
     );
 
+
     throw new Error(
       "El servidor no devolvió una respuesta válida."
     );
@@ -2869,9 +3261,11 @@ function mostrarCargando(
       "listaRegistros"
     );
 
+
   if (!cont) {
     return;
   }
+
 
   cont.innerHTML = `
 
@@ -2905,10 +3299,12 @@ function mostrarCargaGeneral(
       "cargandoGeneral"
     );
 
+
   const textoCont =
     document.getElementById(
       "textoCargandoGeneral"
     );
+
 
   if (textoCont) {
 
@@ -2917,6 +3313,7 @@ function mostrarCargaGeneral(
       "Procesando...";
 
   }
+
 
   if (cont) {
 
@@ -2935,6 +3332,7 @@ function ocultarCargaGeneral() {
     document.getElementById(
       "cargandoGeneral"
     );
+
 
   if (cont) {
 
@@ -2960,9 +3358,11 @@ function mostrarError(
       "listaRegistros"
     );
 
+
   if (!cont) {
     return;
   }
+
 
   cont.innerHTML = `
 
@@ -3002,15 +3402,18 @@ function parseFecha(
     return null;
   }
 
+
   const texto =
     String(
       valor
     ).trim();
 
+
   let fecha =
     new Date(
       texto
     );
+
 
   if (
     !isNaN(
@@ -3022,19 +3425,23 @@ function parseFecha(
 
   }
 
+
   const m =
     texto.match(
       /^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})/
     );
 
+
   if (!m) {
     return null;
   }
+
 
   let anio =
     Number(
       m[3]
     );
+
 
   if (
     anio < 100
@@ -3043,6 +3450,7 @@ function parseFecha(
     anio += 2000;
 
   }
+
 
   fecha =
     new Date(
@@ -3054,6 +3462,7 @@ function parseFecha(
         m[1]
       )
     );
+
 
   return isNaN(
     fecha.getTime()
@@ -3073,8 +3482,10 @@ function obtenerFechaHoy() {
   const ahora =
     new Date();
 
+
   const anio =
     ahora.getFullYear();
+
 
   const mes =
     String(
@@ -3084,6 +3495,7 @@ function obtenerFechaHoy() {
       "0"
     );
 
+
   const dia =
     String(
       ahora.getDate()
@@ -3091,6 +3503,7 @@ function obtenerFechaHoy() {
       2,
       "0"
     );
+
 
   return `${anio}-${mes}-${dia}`;
 
@@ -3201,6 +3614,7 @@ function setValue(
       id
     );
 
+
   if (elemento) {
 
     elemento.value =
@@ -3224,6 +3638,7 @@ function setText(
     document.getElementById(
       id
     );
+
 
   if (elemento) {
 
@@ -3251,6 +3666,7 @@ document.addEventListener(
 
     }
 
+
     cerrarModalRealizado();
 
     cerrarModalEvidencia();
@@ -3269,3 +3685,4 @@ function volverMenu() {
     "Menu.html";
 
 }
+
